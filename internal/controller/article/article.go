@@ -20,6 +20,24 @@ func NewArticleController(deps shared.Deps, services service.Holder) (*Controlle
 	return &Controller{deps: deps, services: services}, nil
 }
 
+func (c *Controller) Post(ctx echo.Context) (err error) {
+	var (
+		req  = dto.CreateArticleRequest{}
+		rctx = ctx.Request().Context()
+	)
+
+	if err = ctx.Bind(&req); err != nil {
+		return helper.ErrorResponse(ctx, err)
+	}
+
+	err = c.services.Article.Create(rctx, &req)
+	if err != nil {
+		return helper.ErrorResponse(ctx, err)
+	}
+
+	return helper.SuccessResponse(ctx, nil)
+}
+
 func (c *Controller) GetArticles(ctx echo.Context) (err error) {
 	var (
 		rctx = ctx.Request().Context()

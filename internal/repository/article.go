@@ -10,7 +10,7 @@ import (
 type (
 	ArticleRepository interface {
 		Create(article *entity.Article) (err error)
-		Get(filter *dto.ArticleFilter) (articles []entity.Article, err error)
+		Get(filter *dto.ArticleFilter) (result []dto.GetArticlesResponse, err error)
 	}
 
 	implArticle struct {
@@ -35,7 +35,7 @@ func (r *implArticle) Create(article *entity.Article) (err error) {
 	return
 }
 
-func (r *implArticle) Get(filter *dto.ArticleFilter) (articles []entity.Article, err error) {
+func (r *implArticle) Get(filter *dto.ArticleFilter) (result []dto.GetArticlesResponse, err error) {
 	baseQuery := `
 			SELECT articles.id, authors.name, articles.title, articles.body, articles.created_at
 			FROM articles articles
@@ -60,16 +60,16 @@ func (r *implArticle) Get(filter *dto.ArticleFilter) (articles []entity.Article,
 
 	rows, err := r.deps.DB.Query(baseQuery, args...)
 	if err != nil {
-		return articles, err
+		return result, err
 	}
 	defer rows.Close()
 
 	for rows.Next() {
-		var article entity.Article
-		if err = rows.Scan(&article.ID, &article.AuthorID, &article.Title, &article.Body, &article.CreatedAt); err != nil {
-			return articles, err
+		var article dto.GetArticlesResponse
+		if err = rows.Scan(&article.ID, &article.AuthorName, &article.Title, &article.Body, &article.CreatedAt); err != nil {
+			return result, err
 		}
-		articles = append(articles, article)
+		result = append(result, article)
 	}
 	return
 }

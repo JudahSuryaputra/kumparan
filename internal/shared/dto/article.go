@@ -3,9 +3,9 @@ package dto
 import "time"
 
 type CreateArticleRequest struct {
-	AuthorID string `json:"author_id"`
-	Title    string `json:"title"`
-	Body     string `json:"body"`
+	AuthorID string `json:"author_id" validate:"required"`
+	Title    string `json:"title" validate:"required"`
+	Body     string `json:"body" validate:"required"`
 }
 
 type ArticleFilter struct {

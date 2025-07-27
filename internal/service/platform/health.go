@@ -36,14 +36,9 @@ func (i *implPlatform) HealthCheck(ctx context.Context) (*dto.HealthCheckRespons
 	}
 
 	//Get Generic Database object sql.DB
-	sqlDB, err := i.deps.DB.DB()
+	err = i.deps.DB.Ping()
 	if err != nil {
 		dbStatus = common.ERROR
-	}
-
-	errDB := sqlDB.Ping()
-	if errDB == nil {
-		dbStatus = common.OK
 	}
 
 	resp := dto.HealthCheckResponse{

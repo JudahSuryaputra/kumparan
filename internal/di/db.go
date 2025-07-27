@@ -2,19 +2,20 @@ package di
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/redis/go-redis/v9"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"kumparan/config"
 	"log"
+
+	_ "github.com/lib/pq"
 )
 
-func NewORM(cfg *config.Configuration) *gorm.DB {
+func NewDB(cfg *config.Configuration) *sql.DB {
 	dsn := "host=" + cfg.DbHost + " user=" + cfg.DbUser + " password=" + cfg.DbPassword +
 		" dbname=" + cfg.DbName + " port=" + cfg.DbPort + " sslmode=" + cfg.DbSSL
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := sql.Open("postgres", dsn)
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}

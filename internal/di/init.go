@@ -6,7 +6,6 @@ import (
 	"kumparan/internal/controller"
 	"kumparan/internal/repository"
 	"kumparan/internal/service"
-	"kumparan/internal/shared"
 )
 
 var (
@@ -17,7 +16,7 @@ func init() {
 	if err := Container.Provide(config.New); err != nil {
 		panic(err)
 	}
-	if err := Container.Provide(NewORM); err != nil {
+	if err := Container.Provide(NewDB); err != nil {
 		panic(err)
 	}
 	if err := Container.Provide(NewRedisClient); err != nil {
@@ -31,9 +30,6 @@ func init() {
 		panic(err)
 	}
 	if err := repository.Register(Container); err != nil {
-		panic(err)
-	}
-	if err := shared.Register(Container); err != nil {
 		panic(err)
 	}
 }

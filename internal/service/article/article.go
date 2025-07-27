@@ -10,7 +10,7 @@ import (
 type (
 	Service interface {
 		Create(ctx context.Context, createRequest *dto.CreateArticleRequest) (err error)
-		Get(ctx context.Context, filter *dto.ArticleFilter) (err error)
+		Get(ctx context.Context, filter *dto.ArticleFilter) (resp []dto.GetArticlesResponse, err error)
 	}
 
 	implArticle struct {
